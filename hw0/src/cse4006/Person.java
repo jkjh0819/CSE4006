@@ -1,7 +1,13 @@
 package cse4006;
 
 public class Person {
-    public static void main(String args[]){
-        System.out.println("hello world");
+    private String name;
+
+    public Person(String name){
+        this.name = name;
+    }
+
+    public String getName(){
+        return name;
     }
 }

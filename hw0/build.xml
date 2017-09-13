@@ -19,7 +19,7 @@
     <target name="jar" depends="compile">
         <jar destfile="${basedir}/hw0.jar" basedir="${build}">
             <manifest>
-                <attribute name="Main-Class" value="cse4006.Person"/>
+                <attribute name="Main-Class" value="cse4006.Program"/>
             </manifest>
         </jar>
     </target>
