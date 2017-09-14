@@ -48,4 +48,6 @@ import cse4006.FriendGraph;
 
 import cse4006.Person; 
 
-위 두 줄을 추가하시면 과제에 
+위 두 줄을 추가하시면 아래와 같이 과제 명세서에 적힌 예제 실행이 가능합니다.
+
+![ex_screenshot](./test_result.png)
