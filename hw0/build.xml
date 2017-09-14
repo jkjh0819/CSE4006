@@ -1,32 +1,33 @@
 <project name="hw0" default="jar" basedir=".">
-    <!-- set global properties for this build -->
-    <property name="src" location="src"/>
-    <property name="build" location="build"/>
+  <!-- set global properties for this build -->
+  <property name="src" location="src"/>
+  <property name="build" location="build"/>
 
-    <target name="init">
-        <!-- Create the time stamp -->
-        <tstamp/>
-        <!-- Create the build directory structure used by compile -->
-        <mkdir dir="${build}"/>
-    </target>
+  <target name="init">
+    <!-- Create the time stamp -->
+    <tstamp/>
+    <!-- Create the build directory structure used by compile -->
+    <mkdir dir="${build}"/>
+  </target>
 
-    <target name="compile" depends="init"
-            description="compile the source">
-        <!-- Compile the java code from ${src} into ${build} -->
-        <javac srcdir="${src}" destdir="${build}" includeantruntime="false"/>
-    </target>
+  <target name="compile" depends="init"
+    description="compile the source">
+    <!-- Compile the java code from ${src} into ${build} -->
+    <javac srcdir="${src}" destdir="${build}" includeantruntime="false"/>
+  </target>
 
-    <target name="jar" depends="compile">
-        <jar destfile="${basedir}/hw0.jar" basedir="${build}">
-            <manifest>
-                <attribute name="Main-Class" value="cse4006.Program"/>
-            </manifest>
-        </jar>
-    </target>
+  <target name="jar" depends="compile">
+    <jar destfile="${basedir}/hw0.jar" basedir="${build}">
+      <manifest>
+        <attribute name="Main-Class" value="cse4006.Program"/>
+      </manifest>
+    </jar>
+  </target>
 
-    <target name="clean"
-            description="clean up">
-        <!-- Delete the ${build} directory trees -->
-        <delete dir="${build}"/>
-    </target>
+  <target name="clean"
+    description="clean up">
+    <!-- Delete the ${build} directory trees -->
+    <delete dir="${build}"/>
+    <delete file="hw0.jar"/>
+  </target>
 </project>
