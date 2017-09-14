@@ -41,3 +41,11 @@ build.xml을 이용하여 ant build를 하는 경우 build 폴더를 생성하�
 첫 시작지점은 cse4006.Program에 있는 main입니다.
 
 실행 시 main에서 getDistance함수를 호출한 결과를 출력합니다. 
+
+jar 파일을 import 한 후에 실행하시려면 Intellij 기준 Project Structure에서 Libraries에 jar파일을 추가하신 후 
+
+import cse4006.FriendGraph; 
+
+import cse4006.Person; 
+
+위 두 줄을 추가하시면 과제에 
