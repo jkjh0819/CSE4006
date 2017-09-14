@@ -43,10 +43,11 @@ public class FriendGraph {
     }
 
     public int getDistance(String p1, String p2){
-        int cnt = 1, tmp;
+        int cnt = 0;
         int p1_idx = findIndex(p1);
         int p2_idx = findIndex(p2);
-        Queue q = new Queue(num);
+        Queue q = new Queue(num + 1);
+        Node n = new Node(p1_idx, cnt);
 
         if (p1_idx == -1 || p2_idx == -1) {
             return -1;
@@ -58,17 +59,17 @@ public class FriendGraph {
                 visited[i] = false;
             }
             visited[p1_idx] = true;
-            q.enqueue(p1_idx);
+            q.enqueue(n);
 
-            while (!q.IsEmpty()) {
-                tmp = q.dequeue();
+            while (!q.isEmpty()) {
+                n = q.dequeue();
                 for (int i = 0; i < num; i++) {
-                    if (graph[tmp][i] && !visited[i]) {
+                    if (graph[n.getIdx()][i] && !visited[i]) {
                         if (i == p2_idx) {
-                            return cnt;
+                            return n.getDist() + 1;
                         } else {
                             visited[i] = true;
-                            q.enqueue(i);
+                            q.enqueue(new Node(i,cnt+1));
                         }
                     }
                 }
