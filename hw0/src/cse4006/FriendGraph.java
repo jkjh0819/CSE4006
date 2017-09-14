@@ -51,7 +51,7 @@ public class FriendGraph {
    *
    * search given name in names and return index.
    */
-  public int findIndex(String name) {
+  private int findIndex(String name) {
     for (int i = 0; i < num; i++) {
       if (names[i].equals(name)) {
         return i;
