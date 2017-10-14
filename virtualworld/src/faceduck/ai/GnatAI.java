@@ -6,6 +6,7 @@ import faceduck.skeleton.interfaces.Actor;
 import faceduck.skeleton.interfaces.Command;
 import faceduck.skeleton.interfaces.World;
 import faceduck.skeleton.util.Direction;
+import faceduck.skeleton.util.Util;
 
 /**
  * The AI for a Gnat. This AI will pick a random direction and then return a
@@ -30,6 +31,6 @@ public class GnatAI implements AI {
 
 	@Override
 	public Command act(World world, Actor actor) {
-		return null;
+		return new MoveCommand(Util.randomDir());
 	}
 }

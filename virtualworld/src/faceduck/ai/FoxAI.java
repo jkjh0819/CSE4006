@@ -11,6 +11,7 @@ import faceduck.skeleton.interfaces.Rabbit;
 import faceduck.skeleton.interfaces.World;
 import faceduck.skeleton.util.Direction;
 import faceduck.skeleton.util.Location;
+import faceduck.skeleton.util.Util;
 
 public class FoxAI extends AbstractAI implements AI {
 
@@ -22,6 +23,7 @@ public class FoxAI extends AbstractAI implements AI {
 
     @Override
     public Command act(World world, Actor actor) {
-        return null;
+
+        return new MoveCommand(Util.randomDir());
     }
 }
