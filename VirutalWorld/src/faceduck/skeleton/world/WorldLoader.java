@@ -23,7 +23,7 @@ public class WorldLoader {
 	private int numRabbits;
 	private int numFoxes;
 
-	//added
+	//variable for new actor
 	private int numStorms;
 
 	public WorldLoader(World w) {
@@ -33,7 +33,7 @@ public class WorldLoader {
 		this.numRabbits = numGrass / 4;
 		this.numFoxes = numRabbits / 8;
 
-		//added
+		//set new actor number
 		this.numStorms = 2;
 	}
 
@@ -90,7 +90,7 @@ public class WorldLoader {
 		}
 	}
 
-	//added
+	//add new actor to world
 	private void addStorm(){
 		for(int i = 0; i < numStorms; i++){
 			Location loc = Util.randomEmptyLoc(world);

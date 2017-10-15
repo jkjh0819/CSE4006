@@ -41,7 +41,7 @@ public class WorldPanel extends JPanel implements Runnable {
   private final ImageIcon unknownImage = new ImageIcon(getClass()
       .getResource("icons/unknown.png"));
 
-  //added
+  //add new actor icon
   private final ImageIcon stormImage = new ImageIcon(getClass().getResource(
       "icons/storm.png"));
 
@@ -82,7 +82,7 @@ public class WorldPanel extends JPanel implements Runnable {
         } else if (thing instanceof Gnat) {
           gnatImage.paintIcon(this, g, x, y);
         } else if (thing instanceof Storm) {
-          //added
+          //paint new actor
           stormImage.paintIcon(this, g, x, y);
         } else {
           unknownImage.paintIcon(this, g, x, y);
