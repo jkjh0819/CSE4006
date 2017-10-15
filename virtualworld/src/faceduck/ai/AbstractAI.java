@@ -12,6 +12,9 @@ import faceduck.skeleton.util.Util;
 
 import java.util.Random;
 
+/**
+ * The AI for abstracting other AIs. It includes some functions to help to make a decision.
+ */
 public abstract class AbstractAI implements AI {
 
     /**

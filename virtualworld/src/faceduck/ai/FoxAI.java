@@ -12,10 +12,14 @@ import faceduck.skeleton.util.Location;
 
 import java.util.Random;
 
+/**
+ * The AI for a Fox. This AI will pick a direction for following rabbit or decide to breed or to eat rabbit in adjacent location.
+ * and then return a command which executes the decision.
+ */
 public class FoxAI extends AbstractAI implements AI {
 
     private static final double RABBIT_WEIGHT = 20;
-    private static final int HUNGRY_MAX = 20;
+    private static final int HUNGRY_MAX = 13;
 
     /**
      * constructor for FoxAI

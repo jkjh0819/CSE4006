@@ -8,21 +8,36 @@ import faceduck.skeleton.util.Location;
 
 import java.util.Random;
 
+/**
+ * Storm is an {@link Actor}. Storm moves randomly.
+ * When it moves, it remains eaten object to previous location and eats an object in new location.
+ */
 public class Storm implements Actor {
 
     private static final int VIEW_RANGE = 40;
     private static final int COOL_DOWN = 3;
 
+    //variable for executing command
     private StormAI ai;
     private Object outObject;
     private Object inObject;
 
+    /**
+     * constructor for Storm, it initialize ai and objects.
+     */
     public Storm() {
         ai = new StormAI();
         inObject = null;
         outObject = null;
     }
 
+    /**
+     * Get a command to execute from ai and execute it.
+     *
+     * @param world
+     *            The world that the actor is currently in.
+     *
+     */
     @Override
     public void act(World world) {
         if (world == null) {
@@ -33,16 +48,34 @@ public class Storm implements Actor {
         cmd.execute(world, this);
     }
 
+    /**
+     * Returns view range value of storm.
+     *
+     * @return an Integer representing view range.
+     */
     @Override
     public int getViewRange() {
         return VIEW_RANGE;
     }
 
+    /**
+     * Returns cool down value of storm.
+     *
+     * @return an Integer representing cool down.
+     */
     @Override
     public int getCoolDown() {
         return COOL_DOWN;
     }
 
+    /**
+     * Returns a location to move regardless of existence of actor.
+     *
+     * @param world
+     *          The world to inspect and move.
+     *
+     * @return a location to move.
+     */
     private Location randomLoc(World world) {
         Random rand = new Random();
         int x = rand.nextInt(world.getWidth());
@@ -51,16 +84,28 @@ public class Storm implements Actor {
         return new Location(x, y);
     }
 
+    /**
+     * Storm moves to random location.
+     * When it moves, it remains eaten object to previous location and eats an object in new location.
+     *
+     * @param world
+     *          The world to inspect and move.
+     */
     public void summon(World world) {
         Location oldLoc = world.getLocation(this);
         world.remove(this);
 
+        //move eaten object for sending out.
         outObject = inObject;
 
+        //if eaten object exist, remain it in previous location.
         if (outObject != null)
             world.add(outObject, oldLoc);
+
+        //move to random location
         Location newLoc = randomLoc(world);
 
+        //if there is an object, storm eats it.
         inObject = world.getThing(newLoc);
         if (inObject != null) {
             world.remove(inObject);

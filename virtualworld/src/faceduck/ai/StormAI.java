@@ -6,6 +6,9 @@ import faceduck.skeleton.interfaces.Actor;
 import faceduck.skeleton.interfaces.Command;
 import faceduck.skeleton.interfaces.World;
 
+/**
+ * The AI for a Storm. This AI will return a summon command when cool down time is finished.
+ */
 public class StormAI extends AbstractAI implements AI {
 
     /**

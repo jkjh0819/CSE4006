@@ -3,7 +3,6 @@ package faceduck.ai;
 import faceduck.actors.RabbitImpl;
 import faceduck.commands.BreedCommand;
 import faceduck.commands.EatCommand;
-import faceduck.commands.MoveCommand;
 import faceduck.skeleton.interfaces.AI;
 import faceduck.skeleton.interfaces.Actor;
 import faceduck.skeleton.interfaces.Command;
@@ -13,6 +12,10 @@ import faceduck.skeleton.util.Location;
 
 import java.util.Random;
 
+/**
+ * The AI for a Rabbit. This AI will pick a direction for searching grass or decide to breed or to eat grass in adjacent location.
+ * and then return a command which executes the decision.
+ */
 public class RabbitAI extends AbstractAI implements AI {
 
     //weight for calculate Location preference
