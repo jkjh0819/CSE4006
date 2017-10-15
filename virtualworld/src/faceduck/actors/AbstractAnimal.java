@@ -1,5 +1,7 @@
 package faceduck.actors;
 
+import static java.lang.Math.min;
+
 import faceduck.ai.AbstractAI;
 import faceduck.skeleton.interfaces.Animal;
 import faceduck.skeleton.interfaces.Command;
@@ -93,6 +95,6 @@ public abstract class AbstractAnimal implements Animal {
 
     private void earnEnergy(int newEnergy) {
         energy += newEnergy;
-        energy = newEnergy < getMaxEnergy() ? newEnergy : getMaxEnergy();
+        energy = min(energy, getMaxEnergy());
     }
 }

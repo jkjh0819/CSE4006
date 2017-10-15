@@ -35,6 +35,8 @@ public abstract class AbstractAI implements AI {
             return ActorType.GRASS;
         } else if (object instanceof Gardener) {
             return ActorType.GARDENER;
+        } else if (object instanceof Storm){
+            return ActorType.STORM;
         } else if (object == null) {
             return null;
         } else
@@ -42,7 +44,7 @@ public abstract class AbstractAI implements AI {
 
     }
 
-    protected Location emptyAdjacentLoc(World world, Location loc) {
+    protected Direction emptyAdjacentDir(World world, Location loc) {
         Random rand = new Random();
         int index = rand.nextInt(Direction.values().length);
 
@@ -50,7 +52,7 @@ public abstract class AbstractAI implements AI {
             index = ((index + 1) % Direction.values().length);
             Location newLoc = new Location(loc, Direction.values()[index]);
             if (world.isValidLocation(newLoc) && world.getThing(newLoc) == null)
-                return newLoc;
+                return Direction.values()[index];
         }
         return null;
     }

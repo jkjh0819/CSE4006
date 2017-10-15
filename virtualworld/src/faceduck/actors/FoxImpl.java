@@ -12,7 +12,7 @@ public class FoxImpl extends AbstractAnimal implements Fox {
     private static final int FOX_MAX_ENERGY = 160;
     private static final int FOX_VIEW_RANGE = 5;
     private static final int FOX_BREED_LIMIT = FOX_MAX_ENERGY * 3 / 4;
-    private static final int FOX_COOL_DOWN = 2;
+    private static final int FOX_COOL_DOWN = 4;
     private static final int FOX_INITAL_ENERGY = FOX_MAX_ENERGY * 1 / 2;
 
     public FoxImpl(){

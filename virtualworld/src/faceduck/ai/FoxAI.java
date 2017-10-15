@@ -32,7 +32,7 @@ public class FoxAI extends AbstractAI implements AI {
         if (world == null)
             throw new NullPointerException("World cannot be null.");
         if (!(actor instanceof FoxImpl))
-            throw new ClassCastException("Actor should be Fox.");
+            throw new IllegalArgumentException("Actor should be Fox.");
 
         FoxImpl fox = (FoxImpl) actor;
 
@@ -40,9 +40,9 @@ public class FoxAI extends AbstractAI implements AI {
         Location oldLoc = world.getLocation(actor);
 
         if (energy > fox.getBreedLimit()) {
-            Location newLoc = emptyAdjacentLoc(world, oldLoc);
-            if(newLoc != null)
-                return new BreedCommand(oldLoc.dirTo(newLoc));
+            Direction dir = emptyAdjacentDir(world, oldLoc);
+            if(dir != null)
+                return new BreedCommand(dir);
         } else {
             Location newLoc = findAdjacentObject(world, oldLoc, ActorType.RABBIT);
             if(newLoc != null){
@@ -69,10 +69,11 @@ public class FoxAI extends AbstractAI implements AI {
             }
         }
 
-        if(preferLoc != oldLoc)
-            return new MoveCommand(oldLoc.dirTo(preferLoc));
+        if(preferLoc != oldLoc) {
+            if(world.getThing(new Location(oldLoc, oldLoc.dirTo(preferLoc))) == null)
+                return new MoveCommand(oldLoc.dirTo(preferLoc));
+        }
 
-        //해당 안될때 움직임 변경
-        return null;
+        return new MoveCommand(Util.randomDir());
     }
 }

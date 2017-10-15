@@ -37,7 +37,7 @@ public class GnatAI extends AbstractAI implements AI {
         if (world == null)
             throw new NullPointerException("World cannot be null.");
         if (!(actor instanceof Gnat))
-            throw new ClassCastException("Actor should be Gnat.");
+            throw new IllegalArgumentException("Actor should be Gnat.");
 
         return new MoveCommand(Util.randomDir());
     }

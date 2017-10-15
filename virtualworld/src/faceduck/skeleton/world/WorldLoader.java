@@ -5,6 +5,7 @@ import faceduck.actors.Gardener;
 import faceduck.actors.Gnat;
 import faceduck.actors.Grass;
 import faceduck.actors.RabbitImpl;
+import faceduck.actors.Storm;
 import faceduck.skeleton.interfaces.Actor;
 import faceduck.skeleton.interfaces.World;
 import faceduck.skeleton.util.Location;
@@ -22,12 +23,18 @@ public class WorldLoader {
 	private int numRabbits;
 	private int numFoxes;
 
+	//added
+	private int numStorms;
+
 	public WorldLoader(World w) {
 		this.world = w;
 		this.numGrass = world.getHeight() * world.getWidth() / 7;
 		this.numGnats = numGrass / 4;
 		this.numRabbits = numGrass / 4;
 		this.numFoxes = numRabbits / 8;
+
+		//added
+		this.numStorms = 5;
 	}
 
 	/**
@@ -39,6 +46,9 @@ public class WorldLoader {
 		addGardener();
 		addRabbit();
 		addFox();
+
+		//added
+		addStorm();
 	}
 
 	private void addGrass() {
@@ -76,6 +86,16 @@ public class WorldLoader {
 			if (loc != null) {
 				// If the world isn't full
 				world.add(new RabbitImpl(), loc);
+			}
+		}
+	}
+
+	//added
+	private void addStorm(){
+		for(int i = 0; i < numStorms; i++){
+			Location loc = Util.randomEmptyLoc(world);
+			if(loc != null){
+				world.add(new Storm(), loc);
 			}
 		}
 	}
