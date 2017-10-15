@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="VirutalWorld" default="jar" basedir="./../VirutalWorld">
+    <!-- set global properties for this build -->
+    <property name="src" value="${basedir}/src"/>
+    <property name="build" value="${basedir}/build"/>
+
+    <path id="classpath">
+        <pathelement location="${build}"/>
+    </path>
+
+    <target name="init">
+        <!-- Create the build directory structure used by compile -->
+        <mkdir dir="${build}"/>
+    </target>
+
+    <target name="compile" depends="init" description="compile the source">
+        <!-- Compile the java code from ${src} into ${build} -->
+        <javac srcdir="${src}/faceduck" destdir="${build}" includeantruntime="false">
+            <classpath refid="classpath"/>
+        </javac>
+
+        <copy todir="${build}/faceduck/skeleton/world/icons">
+            <fileset dir="${src}/faceduck/skeleton/world/icons"/>
+        </copy>
+
+    </target>
+
+    <target name="jar" depends="compile">
+        <jar destfile="${basedir}/../vw.jar" basedir="${build}">
+            <manifest>
+                <attribute name="Main-Class" value="faceduck.skeleton.world.WorldUI"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <target name="clean" description="clean up">
+        <!-- Delete the ${build} directory trees -->
+        <delete dir="${build}"/>
+        <delete file="${basedir}/../vw.jar"/>
+    </target>
+</project>
