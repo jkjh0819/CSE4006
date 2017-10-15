@@ -11,11 +11,12 @@ public class Gnat extends AbstractAnimal implements Animal {
     private static final int VIEW_RANGE = 1;
     private static final int BREED_LIMIT = 0;
     private static final int COOL_DOWN = 0;
-
+    private static final int MAX_AGE = 0;
 
     public Gnat(int n) {
         ai = new GnatAI();
         energy = MAX_ENERGY;
+        age = -1;
     }
 
     @Override
@@ -41,5 +42,14 @@ public class Gnat extends AbstractAnimal implements Animal {
     @Override
     public Animal makeChild(int initEnergy) {
         return null;
+    }
+
+    @Override
+    protected void aging(){
+        return;
+    }
+
+    protected int getMaxAge(){
+        return MAX_AGE;
     }
 }

@@ -3,14 +3,12 @@ package faceduck.ai;
 import faceduck.actors.FoxImpl;
 import faceduck.commands.BreedCommand;
 import faceduck.commands.EatCommand;
-import faceduck.commands.MoveCommand;
 import faceduck.skeleton.interfaces.AI;
 import faceduck.skeleton.interfaces.Actor;
 import faceduck.skeleton.interfaces.Command;
 import faceduck.skeleton.interfaces.World;
 import faceduck.skeleton.util.Direction;
 import faceduck.skeleton.util.Location;
-import faceduck.skeleton.util.Util;
 
 import java.util.Random;
 
@@ -35,9 +33,7 @@ public class FoxAI extends AbstractAI implements AI {
             throw new IllegalArgumentException("Actor should be Fox.");
 
         Random rand = new Random();
-
         FoxImpl fox = (FoxImpl) actor;
-
         int energy = fox.getEnergy();
         Location oldLoc = world.getLocation(actor);
 
@@ -73,12 +69,7 @@ public class FoxAI extends AbstractAI implements AI {
             }
         }
 
-        if(preferLoc != oldLoc) {
-            if(world.getThing(new Location(oldLoc, oldLoc.dirTo(preferLoc))) == null)
-                return new MoveCommand(oldLoc.dirTo(preferLoc));
-        }
-
-        return new MoveCommand(Util.randomDir());
+        return moveTo(world, oldLoc, preferLoc);
     }
 
 

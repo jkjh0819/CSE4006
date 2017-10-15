@@ -10,7 +10,6 @@ import faceduck.skeleton.interfaces.Command;
 import faceduck.skeleton.interfaces.World;
 import faceduck.skeleton.util.Direction;
 import faceduck.skeleton.util.Location;
-import faceduck.skeleton.util.Util;
 
 import java.util.Random;
 
@@ -20,7 +19,7 @@ public class RabbitAI extends AbstractAI implements AI {
     private static final double GNAT_WEIGHT = -2;
     private static final double FOX_WEIGHT = -20;
     private static final double RABBIT_WEIGHT = -1;
-    private static final int BRRED_PROB_MAX = 10;
+    private static final int BREED_PROB_MAX = 10;
     private static final int BREED_PROB = 5;
 
     /**
@@ -42,15 +41,13 @@ public class RabbitAI extends AbstractAI implements AI {
         }
 
         Random rand = new Random();
-
         RabbitImpl rabbit = (RabbitImpl) actor;
-
         int energy = rabbit.getEnergy();
         Location oldLoc = world.getLocation(actor);
 
         if (energy > rabbit.getBreedLimit()) {
             Direction dir = emptyAdjacentDir(world, oldLoc);
-            if (dir != null && rand.nextInt(BRRED_PROB_MAX) < BREED_PROB) {
+            if (dir != null && rand.nextInt(BREED_PROB_MAX) < BREED_PROB) {
                 return new BreedCommand(dir);
             }
         } else {
@@ -78,20 +75,7 @@ public class RabbitAI extends AbstractAI implements AI {
             }
         }
 
-        if (preferLoc != oldLoc) {
-            Location newLoc = new Location(oldLoc, oldLoc.dirTo(preferLoc));
-            if (world.isValidLocation(newLoc)) {
-                if (world.getThing(new Location(oldLoc, oldLoc.dirTo(preferLoc))) == null) {
-                    return new MoveCommand(oldLoc.dirTo(preferLoc));
-                }
-            } else {
-                if (emptyAdjacentDir(world, oldLoc) != null)
-                    return new MoveCommand(emptyAdjacentDir(world, oldLoc));
-            }
-
-        }
-
-        return new MoveCommand(Util.randomDir());
+        return moveTo(world, oldLoc, preferLoc);
     }
 
     private double calWeight(World world, Location loc) {

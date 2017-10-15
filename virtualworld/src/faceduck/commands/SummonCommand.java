@@ -5,11 +5,23 @@ import faceduck.skeleton.interfaces.Actor;
 import faceduck.skeleton.interfaces.Command;
 import faceduck.skeleton.interfaces.World;
 
+/**
+ * This command calls an {@link Storm} to breed.
+ */
 public class SummonCommand implements Command {
 
+  /**
+   * Instantiates a summon command to be executed.
+   */
   public SummonCommand(){
   }
 
+  /**
+   * {@inheritDoc}
+   *
+   * @throws IllegalArgumentException
+   *             If actor is not an instance of Storm.
+   */
   @Override
   public void execute(World world, Actor actor) {
     if (actor == null) {

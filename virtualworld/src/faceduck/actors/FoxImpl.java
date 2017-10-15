@@ -9,16 +9,19 @@ public class FoxImpl extends AbstractAnimal implements Fox {
     private static final int FOX_VIEW_RANGE = 5;
     private static final int FOX_BREED_LIMIT = FOX_MAX_ENERGY * 3 / 4;
     private static final int FOX_COOL_DOWN = 2;
-    private static final int FOX_INITAL_ENERGY = FOX_MAX_ENERGY * 1 / 2;
+    private static final int FOX_INITIAL_ENERGY = FOX_MAX_ENERGY * 1 / 2;
+    private static final int FOX_MAX_AGE = 100;
 
     public FoxImpl(){
-        energy = FOX_INITAL_ENERGY;
+        energy = FOX_INITIAL_ENERGY;
         ai = new FoxAI();
+        age = 0;
     }
 
     protected FoxImpl(int initEnergy) {
         energy = initEnergy;
         ai = new FoxAI();
+        age = 0;
     }
 
     @Override
@@ -42,7 +45,12 @@ public class FoxImpl extends AbstractAnimal implements Fox {
     }
 
     @Override
-    public Animal makeChild(int initEnergy) {
+    protected Animal makeChild(int initEnergy) {
         return new FoxImpl(energy);
+    }
+
+    @Override
+    protected int getMaxAge(){
+        return FOX_MAX_AGE;
     }
 }

@@ -10,18 +10,19 @@ public class RabbitImpl extends AbstractAnimal implements Rabbit {
     private static final int RABBIT_BREED_LIMIT = RABBIT_MAX_ENERGY * 2 / 4;
     private static final int RABBIT_ENERGY_VALUE = 20;
     private static final int RABBIT_COOL_DOWN = 4;
-    private static final int RABBIT_INITAL_ENERGY = RABBIT_MAX_ENERGY * 1 / 2;
-
-    private RabbitAI rabbitAI = new RabbitAI();
+    private static final int RABBIT_INITIAL_ENERGY = RABBIT_MAX_ENERGY * 1 / 2;
+    private static final int RABBIT_MAX_AGE = 50;
 
     public RabbitImpl(){
-        energy = RABBIT_INITAL_ENERGY;
+        energy = RABBIT_INITIAL_ENERGY;
         ai = new RabbitAI();
+        age = 0;
     }
 
     protected RabbitImpl(int initEnergy){
         energy = initEnergy;
         ai = new RabbitAI();
+        age = 0;
     }
 
     @Override
@@ -50,7 +51,12 @@ public class RabbitImpl extends AbstractAnimal implements Rabbit {
     }
 
     @Override
-    public Animal makeChild(int initEnergy) {
+    protected Animal makeChild(int initEnergy) {
         return new RabbitImpl(initEnergy);
+    }
+
+    @Override
+    protected int getMaxAge(){
+        return RABBIT_MAX_AGE;
     }
 }

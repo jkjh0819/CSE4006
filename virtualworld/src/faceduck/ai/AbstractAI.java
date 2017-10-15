@@ -1,12 +1,14 @@
 package faceduck.ai;
 
 import faceduck.actors.*;
+import faceduck.commands.MoveCommand;
 import faceduck.skeleton.interfaces.AI;
 import faceduck.skeleton.interfaces.Actor;
 import faceduck.skeleton.interfaces.Command;
 import faceduck.skeleton.interfaces.World;
 import faceduck.skeleton.util.Direction;
 import faceduck.skeleton.util.Location;
+import faceduck.skeleton.util.Util;
 
 import java.util.Random;
 
@@ -24,6 +26,9 @@ public abstract class AbstractAI implements AI {
      */
     public abstract Command act(World world, Actor actor);
 
+    /**
+     *
+     */
     protected ActorType typeActor(Object object) {
         if (object instanceof FoxImpl) {
             return ActorType.FOX;
@@ -68,6 +73,22 @@ public abstract class AbstractAI implements AI {
                 return newLoc;
         }
         return null;
+    }
+
+    protected Command moveTo(World world, Location oldLoc, Location preferLoc){
+        if(preferLoc != oldLoc) {
+            Location newLoc = new Location(oldLoc, oldLoc.dirTo(preferLoc));
+            if (world.isValidLocation(newLoc)) {
+                if (world.getThing(new Location(oldLoc, oldLoc.dirTo(preferLoc))) == null) {
+                    return new MoveCommand(oldLoc.dirTo(preferLoc));
+                }
+            } else {
+                if (emptyAdjacentDir(world, oldLoc) != null)
+                    return new MoveCommand(emptyAdjacentDir(world, oldLoc));
+            }
+        }
+
+        return new MoveCommand(Util.randomDir());
     }
 
 }

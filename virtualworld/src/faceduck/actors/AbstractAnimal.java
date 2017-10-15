@@ -16,6 +16,7 @@ public abstract class AbstractAnimal implements Animal {
     private static final int DYING_LEVEL = -1;
 
     protected int energy;
+    protected int age;
     protected AbstractAI ai;
 
     public AbstractAnimal() {
@@ -32,15 +33,23 @@ public abstract class AbstractAnimal implements Animal {
         if (cmd != null) {
             energy -= ACTION_POINT;
             cmd.execute(world, this);
-            if (energy == DYING_LEVEL)
+            if (energy == DYING_LEVEL || age > this.getMaxAge())
                 world.remove(this);
         }
     }
+
+    public abstract int getViewRange();
+
+    public abstract int getCoolDown();
 
     @Override
     public int getEnergy() {
         return energy;
     }
+
+    public abstract int getMaxEnergy();
+
+    public abstract int getBreedLimit();
 
     @Override
     public void eat(World world, Direction dir) {
@@ -93,4 +102,10 @@ public abstract class AbstractAnimal implements Animal {
         energy += newEnergy;
         energy = min(energy, getMaxEnergy());
     }
+
+    protected void aging(){
+        age++;
+    }
+
+    protected abstract int getMaxAge();
 }
