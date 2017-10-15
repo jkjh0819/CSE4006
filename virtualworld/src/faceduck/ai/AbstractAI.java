@@ -27,7 +27,11 @@ public abstract class AbstractAI implements AI {
     public abstract Command act(World world, Actor actor);
 
     /**
+     * Returns a type of Actor object
      *
+     * @param object
+     *          object for deciding what type is.
+     * @return a enum value that means what type is.
      */
     protected ActorType typeActor(Object object) {
         if (object instanceof FoxImpl) {
@@ -40,7 +44,7 @@ public abstract class AbstractAI implements AI {
             return ActorType.GRASS;
         } else if (object instanceof Gardener) {
             return ActorType.GARDENER;
-        } else if (object instanceof Storm){
+        } else if (object instanceof Storm) {
             return ActorType.STORM;
         } else if (object == null) {
             return null;
@@ -49,6 +53,16 @@ public abstract class AbstractAI implements AI {
 
     }
 
+    /**
+     * Returns a direction to point empty adjacent location.
+     *
+     * @param world
+     *          The world to inspect.
+     * @param loc
+     *          The location to be center.
+     *
+     * @return a direction pointing to empty adjacent location. if there isn't return null.
+     */
     protected Direction emptyAdjacentDir(World world, Location loc) {
         Random rand = new Random();
         int index = rand.nextInt(Direction.values().length);
@@ -56,12 +70,25 @@ public abstract class AbstractAI implements AI {
         for (int i = 0; i < Direction.values().length; ++i) {
             index = ((index + 1) % Direction.values().length);
             Location newLoc = new Location(loc, Direction.values()[index]);
+            //if new location is in world and empty,
             if (world.isValidLocation(newLoc) && world.getThing(newLoc) == null)
                 return Direction.values()[index];
         }
         return null;
     }
 
+    /**
+     * Returns a location that an actor to find is located.
+     *
+     * @param world
+     *          The world to inspect.
+     * @param loc
+     *          The location to be center.
+     * @param actorType
+     *          The type of actor to find.
+     *
+     * @return a location that an actor to find is located. If there isn't return null.
+     */
     protected Location findAdjacentObject(World world, Location loc, ActorType actorType) {
         Random rand = new Random();
         int index = rand.nextInt(Direction.values().length);
@@ -69,20 +96,37 @@ public abstract class AbstractAI implements AI {
         for (int i = 0; i < Direction.values().length; ++i) {
             index = ((index + 1) % Direction.values().length);
             Location newLoc = new Location(loc, Direction.values()[i]);
+            //if new location is in world and there is an actor to find,
             if (world.isValidLocation(newLoc) && typeActor(world.getThing(newLoc)) == actorType)
                 return newLoc;
         }
         return null;
     }
 
-    protected Command moveTo(World world, Location oldLoc, Location preferLoc){
-        if(preferLoc != oldLoc) {
+    /**
+     * Returns a move command for moving to preferred location.
+     *
+     * @param world
+     *          The world to inspect.
+     * @param oldLoc
+     *          The location that locates currently.
+     * @param preferLoc
+     *          The location that prefer to move.
+     *
+     * @return a move command that is able to move for going to preferred location.
+     *          If there isn't, return a random move command.
+     */
+    protected Command moveTo(World world, Location oldLoc, Location preferLoc) {
+        if (preferLoc != oldLoc) {
             Location newLoc = new Location(oldLoc, oldLoc.dirTo(preferLoc));
+            //if preferred location is valid
             if (world.isValidLocation(newLoc)) {
+                //and empty, move to the location
                 if (world.getThing(new Location(oldLoc, oldLoc.dirTo(preferLoc))) == null) {
                     return new MoveCommand(oldLoc.dirTo(preferLoc));
                 }
             } else {
+                //if preferred location is not valid, move to empty adjacent location.
                 if (emptyAdjacentDir(world, oldLoc) != null)
                     return new MoveCommand(emptyAdjacentDir(world, oldLoc));
             }

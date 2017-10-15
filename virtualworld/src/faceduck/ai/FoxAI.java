@@ -23,6 +23,15 @@ public class FoxAI extends AbstractAI implements AI {
     public FoxAI() {
     }
 
+    /**
+     * Returns a command to execute. It calculates weight of a location and prefer to move to highest weight.
+     *
+     * @param world
+     *          The world to inspect.
+     * @param actor
+     *          The actor to consider.
+     * @return a Command among Breed, Move, Eat Command.
+     */
     @Override
     public Command act(World world, Actor actor) {
         if (actor == null)
@@ -32,24 +41,33 @@ public class FoxAI extends AbstractAI implements AI {
         if (!(actor instanceof FoxImpl))
             throw new IllegalArgumentException("Actor should be Fox.");
 
+        //get basic value for calculate weight
         Random rand = new Random();
         FoxImpl fox = (FoxImpl) actor;
         int energy = fox.getEnergy();
         Location oldLoc = world.getLocation(actor);
 
+        //if energy satisfied breed limit,
         if (energy > fox.getBreedLimit()) {
             Direction dir = emptyAdjacentDir(world, oldLoc);
-            if(dir != null)
+            //if there is a empty adjacent location, it should breed to the adjacent location.
+            if (dir != null)
                 return new BreedCommand(dir);
         } else {
+            //if rabbit is in adjacent location and fox is hungry, eat
             Location newLoc = findAdjacentObject(world, oldLoc, ActorType.RABBIT);
-            if(newLoc != null){
-                double hungry = (double)fox.getMaxEnergy() / fox.getEnergy();
-                if(hungry > rand.nextInt(HUNGRY_MAX))
+            if (newLoc != null) {
+                //this part decide whether fox is hungry or not.
+                double hungry = (double) fox.getMaxEnergy() / fox.getEnergy();
+
+                //rand.nextInt(HUNGRY_MAX) decide whether fox eats rabbit or not.
+                if (hungry > rand.nextInt(HUNGRY_MAX))
                     return new EatCommand(oldLoc.dirTo(newLoc));
             }
         }
 
+        //if there is no rabbit in adjacent location or decide not to eat rabbit or not to breed
+        //find a location close to rabbit.
         double maxWeight = 0;
         Location preferLoc = oldLoc;
 
@@ -57,11 +75,13 @@ public class FoxAI extends AbstractAI implements AI {
             for (int y = -fox.getViewRange(); y < fox.getViewRange(); y++) {
                 Location newLoc = new Location(oldLoc.getX() + x, oldLoc.getY() + y);
                 double weight = 0;
+                //if location seen is valid
                 if (world.isValidLocation(newLoc)) {
-                    if(typeActor(world.getThing(newLoc)) == ActorType.RABBIT)
-                            weight += RABBIT_WEIGHT * ( 1.0 / oldLoc.distanceTo(newLoc));
+                    //calc weight
+                    if (typeActor(world.getThing(newLoc)) == ActorType.RABBIT)
+                        weight += RABBIT_WEIGHT * (1.0 / oldLoc.distanceTo(newLoc));
 
-                    if(maxWeight < weight) {
+                    if (maxWeight < weight) {
                         maxWeight = weight;
                         preferLoc = newLoc;
                     }
@@ -69,6 +89,7 @@ public class FoxAI extends AbstractAI implements AI {
             }
         }
 
+        //move to preferLocation. If there is no location to move, return Random move command.
         return moveTo(world, oldLoc, preferLoc);
     }
 

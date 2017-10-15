@@ -29,6 +29,16 @@ public class GnatAI extends AbstractAI implements AI {
 	 * to move in a random direction.
 	 */
 
+    /**
+     * Returns a command to execute.
+     *
+     * @param world
+     *            The world to inspect.
+     * @param actor
+     *            The actor to consider.
+     *
+     * @return a random move command.
+     */
     @Override
     public Command act(World world, Actor actor) {
         if (actor == null)
