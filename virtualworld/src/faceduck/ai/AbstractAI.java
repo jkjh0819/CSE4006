@@ -69,4 +69,5 @@ public abstract class AbstractAI implements AI {
         }
         return null;
     }
+
 }

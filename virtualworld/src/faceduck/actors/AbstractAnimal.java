@@ -13,7 +13,7 @@ import faceduck.skeleton.util.Location;
 public abstract class AbstractAnimal implements Animal {
 
     private static final int ACTION_POINT = 1;
-    private static final int DYING_LEVEL = 0;
+    private static final int DYING_LEVEL = -1;
 
     protected int energy;
     protected AbstractAI ai;
@@ -30,14 +30,10 @@ public abstract class AbstractAnimal implements Animal {
 
         Command cmd = this.ai.act(world, this);
         if (cmd != null) {
-            if (!(this instanceof Gnat)) {
-                energy -= ACTION_POINT;
-                cmd.execute(world, this);
-                if (energy <= DYING_LEVEL)
-                    world.remove(this);
-            } else {
-                cmd.execute(world, this);
-            }
+            energy -= ACTION_POINT;
+            cmd.execute(world, this);
+            if (energy == DYING_LEVEL)
+                world.remove(this);
         }
     }
 

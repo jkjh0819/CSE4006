@@ -1,23 +1,23 @@
 package faceduck.ai;
 
 import faceduck.actors.FoxImpl;
-import faceduck.actors.RabbitImpl;
 import faceduck.commands.BreedCommand;
 import faceduck.commands.EatCommand;
 import faceduck.commands.MoveCommand;
 import faceduck.skeleton.interfaces.AI;
 import faceduck.skeleton.interfaces.Actor;
-import faceduck.skeleton.interfaces.Animal;
 import faceduck.skeleton.interfaces.Command;
-import faceduck.skeleton.interfaces.Rabbit;
 import faceduck.skeleton.interfaces.World;
 import faceduck.skeleton.util.Direction;
 import faceduck.skeleton.util.Location;
 import faceduck.skeleton.util.Util;
 
+import java.util.Random;
+
 public class FoxAI extends AbstractAI implements AI {
 
     private static final double RABBIT_WEIGHT = 20;
+    private static final int HUNGRY_MAX = 20;
 
     /**
      * constructor for FoxAI
@@ -34,6 +34,8 @@ public class FoxAI extends AbstractAI implements AI {
         if (!(actor instanceof FoxImpl))
             throw new IllegalArgumentException("Actor should be Fox.");
 
+        Random rand = new Random();
+
         FoxImpl fox = (FoxImpl) actor;
 
         int energy = fox.getEnergy();
@@ -46,7 +48,9 @@ public class FoxAI extends AbstractAI implements AI {
         } else {
             Location newLoc = findAdjacentObject(world, oldLoc, ActorType.RABBIT);
             if(newLoc != null){
-                return new EatCommand(oldLoc.dirTo(newLoc));
+                double hungry = (double)fox.getMaxEnergy() / fox.getEnergy();
+                if(hungry > rand.nextInt(HUNGRY_MAX))
+                    return new EatCommand(oldLoc.dirTo(newLoc));
             }
         }
 
@@ -76,4 +80,6 @@ public class FoxAI extends AbstractAI implements AI {
 
         return new MoveCommand(Util.randomDir());
     }
+
+
 }

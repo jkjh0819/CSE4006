@@ -3,17 +3,14 @@ package faceduck.actors;
 import faceduck.ai.RabbitAI;
 import faceduck.skeleton.interfaces.Animal;
 import faceduck.skeleton.interfaces.Rabbit;
-import faceduck.skeleton.interfaces.World;
-import faceduck.skeleton.util.Direction;
-import faceduck.skeleton.util.Location;
 
 public class RabbitImpl extends AbstractAnimal implements Rabbit {
     private static final int RABBIT_MAX_ENERGY = 20;
     private static final int RABBIT_VIEW_RANGE = 3;
-    private static final int RABBIT_BREED_LIMIT = RABBIT_MAX_ENERGY * 3 / 4;
+    private static final int RABBIT_BREED_LIMIT = RABBIT_MAX_ENERGY * 2 / 4;
     private static final int RABBIT_ENERGY_VALUE = 20;
     private static final int RABBIT_COOL_DOWN = 4;
-    private static final int RABBIT_INITAL_ENERGY = RABBIT_MAX_ENERGY * 1 / 4;
+    private static final int RABBIT_INITAL_ENERGY = RABBIT_MAX_ENERGY * 1 / 2;
 
     private RabbitAI rabbitAI = new RabbitAI();
 

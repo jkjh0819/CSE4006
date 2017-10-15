@@ -1,6 +1,5 @@
 package faceduck.ai;
 
-import faceduck.actors.Storm;
 import faceduck.commands.SummonCommand;
 import faceduck.skeleton.interfaces.AI;
 import faceduck.skeleton.interfaces.Actor;
@@ -17,4 +16,5 @@ public class StormAI extends AbstractAI implements AI {
   public Command act(World world, Actor actor) {
     return new SummonCommand();
   }
+
 }

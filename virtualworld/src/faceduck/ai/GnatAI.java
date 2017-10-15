@@ -6,7 +6,6 @@ import faceduck.skeleton.interfaces.AI;
 import faceduck.skeleton.interfaces.Actor;
 import faceduck.skeleton.interfaces.Command;
 import faceduck.skeleton.interfaces.World;
-import faceduck.skeleton.util.Direction;
 import faceduck.skeleton.util.Util;
 
 /**
@@ -41,4 +40,5 @@ public class GnatAI extends AbstractAI implements AI {
 
         return new MoveCommand(Util.randomDir());
     }
+
 }

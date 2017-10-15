@@ -34,7 +34,7 @@ public class WorldLoader {
 		this.numFoxes = numRabbits / 8;
 
 		//added
-		this.numStorms = 5;
+		this.numStorms = 2;
 	}
 
 	/**
