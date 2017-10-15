@@ -2,12 +2,15 @@ package faceduck.actors;
 
 import faceduck.ai.GnatAI;
 import faceduck.skeleton.interfaces.Animal;
+import faceduck.skeleton.interfaces.Command;
+import faceduck.skeleton.interfaces.World;
+
 /**
  * This is a simple implementation of a Gnat. It never loses energy and moves in
  * random directions.
  */
 public class Gnat extends AbstractAnimal implements Animal {
-    private static final int MAX_ENERGY = -1;
+    private static final int MAX_ENERGY = 10;
     private static final int VIEW_RANGE = 1;
     private static final int BREED_LIMIT = 0;
     private static final int COOL_DOWN = 0;
@@ -16,10 +19,30 @@ public class Gnat extends AbstractAnimal implements Animal {
     /**
      * constructor for Gnat. it initialize ai, energy, age as initial value.
      */
+
+    public Gnat(){
+        ai = new GnatAI();
+    }
+
     public Gnat(int n) {
         ai = new GnatAI();
-        energy = MAX_ENERGY;
-        age = -1;
+    }
+
+    /**
+     * Get a command to execute from ai and execute it.
+     * Gnat does not lose energy and age
+     *
+     * @param world
+     *            The world that the actor is currently in.
+     */
+    @Override
+    public void act(World world) {
+        if (world == null) {
+            throw new NullPointerException("World must not be null.");
+        }
+
+        Command cmd = this.ai.act(world, this);
+        cmd.execute(world, this);
     }
 
     /**

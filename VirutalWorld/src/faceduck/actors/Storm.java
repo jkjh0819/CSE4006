@@ -15,20 +15,18 @@ import java.util.Random;
 public class Storm implements Actor {
 
     private static final int VIEW_RANGE = 40;
-    private static final int COOL_DOWN = 3;
+    private static final int COOL_DOWN = 20;
 
     //variable for executing command
     private StormAI ai;
-    private Object outObject;
-    private Object inObject;
+    private Object insideObject;
 
     /**
-     * constructor for Storm, it initialize ai and objects.
+     * constructor for Storm, it initialize ai and object.
      */
     public Storm() {
         ai = new StormAI();
-        inObject = null;
-        outObject = null;
+        insideObject = null;
     }
 
     /**
@@ -95,20 +93,17 @@ public class Storm implements Actor {
         Location oldLoc = world.getLocation(this);
         world.remove(this);
 
-        //move eaten object for sending out.
-        outObject = inObject;
-
         //if eaten object exist, remain it in previous location.
-        if (outObject != null)
-            world.add(outObject, oldLoc);
+        if (insideObject != null)
+            world.add(insideObject, oldLoc);
 
         //move to random location
         Location newLoc = randomLoc(world);
 
         //if there is an object, storm eats it.
-        inObject = world.getThing(newLoc);
-        if (inObject != null) {
-            world.remove(inObject);
+        insideObject = world.getThing(newLoc);
+        if (insideObject != null) {
+            world.remove(insideObject);
         }
         world.add(this, newLoc);
     }
