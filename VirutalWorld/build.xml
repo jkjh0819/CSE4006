@@ -26,7 +26,7 @@
     </target>
 
     <target name="jar" depends="compile">
-        <jar destfile="${basedir}/../vw.jar" basedir="${build}">
+        <jar destfile="${basedir}/../hw2.jar" basedir="${build}">
             <manifest>
                 <attribute name="Main-Class" value="faceduck.skeleton.world.WorldUI"/>
             </manifest>
@@ -36,6 +36,6 @@
     <target name="clean" description="clean up">
         <!-- Delete the ${build} directory trees -->
         <delete dir="${build}"/>
-        <delete file="${basedir}/../vw.jar"/>
+        <delete file="${basedir}/../hw2.jar"/>
     </target>
 </project>
