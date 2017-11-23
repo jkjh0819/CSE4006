@@ -24,7 +24,7 @@
     <target name="jar" depends="compile">
         <jar destfile="${basedir}/../ParBST.jar" basedir="${build}">
             <manifest>
-                <attribute name="Main-Class" value="BST"/>
+                <attribute name="Main-Class" value="Program"/>
             </manifest>
         </jar>
     </target>
