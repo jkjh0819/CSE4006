@@ -13,6 +13,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 
+//test for proof operation of fine-grained lock binary search tree
 public class BSTTest {
 
     private static final int testSize = 1000000;
@@ -23,22 +24,28 @@ public class BSTTest {
 
     @BeforeClass
     public static void init() throws Exception {
+        //numbers is a collection of numbers between 0 to testSize - 1
         numbers = IntStream.range(0, testSize).boxed().collect(Collectors.toList());
         Collections.shuffle(numbers);
     }
 
+    //parallel test will be executed with 4 threads
     @Before
     public void prepareTest() throws Exception {
         tree = new BST();
         pool = new Pool(4);
     }
 
+    //insert testSize numbers with one thread(main)
+    //after insert, the numbers should be found by search(return true)
     @Test
     public void insert() throws Exception {
         numbers.forEach((e) -> tree.insert(e));
         numbers.forEach((e) -> assertTrue(tree.search(e)));
     }
 
+    //delete testSize numbers with one thread(main)
+    //after delete, the numbers should not be found by search(return false)
     @Test
     public void delete() throws Exception {
         numbers.forEach((e) -> tree.insert(e));
@@ -47,6 +54,8 @@ public class BSTTest {
         numbers.forEach((e) -> assertFalse(tree.search(e)));
     }
 
+    //insert testSize numbers with one thread(main)
+    //after insert, the numbers shuffled and should be found by search(return true)
     @Test
     public void search() throws Exception {
         numbers.forEach((e) -> tree.insert(e));
@@ -54,6 +63,8 @@ public class BSTTest {
         numbers.forEach((e) -> tree.search(e));
     }
 
+    //4 threads execute random operation among insert, delete, search about a unique number
+    //the result will be same with set operation, because a operation executed to a unique number
     @Test
     public void testAll() throws Exception {
         Set<Integer> verifier = new HashSet<>();
