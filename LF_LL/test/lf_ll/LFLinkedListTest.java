@@ -13,9 +13,10 @@ import java.util.stream.IntStream;
 
 import static org.junit.Assert.*;
 
+//test for proof operation of lock-free linked list
 public class LFLinkedListTest {
 
-    private static final int testSize = 10000;
+    private static final int testSize = 30000;
     private static List<Integer> numbers;
 
     private static LFLinkedList lfll;
@@ -23,16 +24,20 @@ public class LFLinkedListTest {
 
     @BeforeClass
     public static void init() throws Exception {
+        //numbers is a collection of numbers between 0 to testSize - 1
         numbers = IntStream.range(0, testSize).boxed().collect(Collectors.toList());
         Collections.shuffle(numbers);
     }
 
+    //parallel test will be executed with 4 threads
     @Before
     public void prepareTest() throws Exception {
         lfll = new LFLinkedList();
         pool = new Pool(4);
     }
 
+    //add testSize numbers with one thread(main)
+    //after add, the numbers should be found by search(return true)
     @Test
     public void add() throws Exception {
         numbers.forEach((e) -> pool.push(() -> lfll.add(e)));
@@ -40,6 +45,8 @@ public class LFLinkedListTest {
         numbers.forEach((e) -> assertTrue(lfll.search(e)));
     }
 
+    //remove testSize numbers with one thread(main)
+    //after remove, the numbers should not be found by search(return false)
     @Test
     public void remove() throws Exception {
         numbers.forEach((e) -> lfll.add(e));
@@ -49,6 +56,8 @@ public class LFLinkedListTest {
         numbers.forEach((e) -> assertFalse(lfll.search(e)));
     }
 
+    //add testSize numbers with one thread(main)
+    //after add, the numbers shuffled and should be found by search(return true)
     @Test
     public void search() throws Exception {
         numbers.forEach((e) -> lfll.add(e));
@@ -57,6 +66,8 @@ public class LFLinkedListTest {
         pool.join();
     }
 
+    //4 threads execute random operation among insert, delete, search about a unique number
+    //the result will be same with set operation, because a operation executed to a unique number
     @Test
     public void testAll() throws Exception {
         Set<Integer> verifier = new HashSet<>();
