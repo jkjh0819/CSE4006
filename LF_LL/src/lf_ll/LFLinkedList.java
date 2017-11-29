@@ -1,18 +1,16 @@
 package lf_ll;
 
 import java.util.concurrent.atomic.AtomicMarkableReference;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class LFLinkedList {
 
     private Node head, tail;
 
     public LFLinkedList() {
-        head = new Node();
+        head = new Node(Integer.MIN_VALUE);
         tail = new Node(Integer.MAX_VALUE);
         head.next = new AtomicMarkableReference<>(tail, false);
         tail.next = new AtomicMarkableReference<>(head, false);
-
     }
 
     public boolean add(int data) {
@@ -33,7 +31,7 @@ public class LFLinkedList {
     }
 
     public boolean remove(int data) {
-        boolean snip;
+        boolean tryNode;
         while (true) {
             Window window = find(head, data);
             Node pred = window.pred, curr = window.curr;
@@ -41,8 +39,8 @@ public class LFLinkedList {
                 return false;
             } else {
                 Node succ = curr.next.getReference();
-                snip = curr.next.attemptMark(succ, true);
-                if (!snip)
+                tryNode = curr.next.attemptMark(succ, true);
+                if (!tryNode)
                     continue;
                 pred.next.compareAndSet(curr, succ, false, false);
                 return true;
@@ -51,30 +49,30 @@ public class LFLinkedList {
     }
 
     public boolean search(int data){
-        boolean[] marked = {false};
+        boolean[] deleteBit = {false};
         Node curr = head;
         while(curr.data < data){
             curr = curr.next.getReference();
-            Node succ = curr.next.get(marked);
+            Node succ = curr.next.get(deleteBit);
         }
-        return (curr.data == data && !marked[0]);
+        return (curr.data == data && !deleteBit[0]);
     }
 
     public Window find(Node head, int data) {
         Node pred = null, curr = null, succ = null;
-        boolean[] marked = {false};
-        boolean snip;
+        boolean[] deleteBit = {false};
+        boolean tryNode;
         retry:
         while (true) {
             pred = head;
             curr = pred.next.getReference();
             while (true) {
-                succ = curr.next.get(marked);
-                while (marked[0]) {
-                    snip = pred.next.compareAndSet(curr, succ, false, false);
-                    if (!snip) continue retry;
+                succ = curr.next.get(deleteBit);
+                while (deleteBit[0]) {
+                    tryNode = pred.next.compareAndSet(curr, succ, false, false);
+                    if (!tryNode) continue retry;
                     curr = succ;
-                    succ = curr.next.get(marked);
+                    succ = curr.next.get(deleteBit);
                 }
                 if (curr.data >= data)
                     return new Window(pred, curr);
