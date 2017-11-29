@@ -1,17 +1,15 @@
-package bst; /**
- * *************************************************************************
- * The sequential Binary Search Tree (for storing int values)
- *****************************************************************************/
+package bst;
 
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-public class BST {
+public class RWBST {
     Lock bstLock = new ReentrantLock();
 
     private Node root;
 
-    public BST() {
+    public RWBST() {
         root = null;
     }
 
@@ -28,7 +26,7 @@ public class BST {
             return;
         }
 
-        root.lock();
+        root.writeLock();
         bstLock.unlock();
 
         Node curr = root;
@@ -38,7 +36,7 @@ public class BST {
             if (data < curr.data) {
                 if (curr.left == null) {
                     curr.left = new Node(data);
-                    curr.unlock();
+                    curr.writeUnlock();
                     return;
                 } else {
                     next = curr.left;
@@ -46,17 +44,17 @@ public class BST {
             } else if (data > curr.data) {
                 if (curr.right == null) {
                     curr.right = new Node(data);
-                    curr.unlock();
+                    curr.writeUnlock();
                     return;
                 } else {
                     next = curr.right;
                 }
             } else {
-                curr.unlock();
+                curr.writeUnlock();
                 return;
             }
-            next.lock();
-            curr.unlock();
+            next.writeLock();
+            curr.writeUnlock();
             curr = next;
         }
     }
@@ -91,32 +89,32 @@ public class BST {
             return false;
         } else {
             Node curr = root;
-            curr.lock();
+            curr.readLock();
             bstLock.unlock();
 
             while (true) {
                 if (curr.data == toSearch) {
-                    curr.unlock();
+                    curr.readUnlock();
                     return true;
-                } else if (toSearch < curr.data ) {
+                } else if (toSearch < curr.data) {
                     Node next = curr.left;
                     if (next == null) {
-                        curr.unlock();
+                        curr.readUnlock();
                         return false;
                     }
 
-                    next.lock();
-                    curr.unlock();
+                    next.readLock();
+                    curr.readUnlock();
                     curr = next;
                 } else if (toSearch > curr.data) {
                     Node next = curr.right;
                     if (next == null) {
-                        curr.unlock();
+                        curr.readUnlock();
                         return false;
                     }
 
-                    next.lock();
-                    curr.unlock();
+                    next.readLock();
+                    curr.readUnlock();
                     curr = next;
                 }
             }
@@ -136,13 +134,13 @@ public class BST {
         } else {
             Node cur = root;
             Node par;
-            cur.lock();
+            cur.writeLock();
 
             int compare = cur.data - data;
             if (compare != 0) {
                 par = cur;
                 cur = compare > 0 ? cur.left : cur.right;
-                cur.lock();
+                cur.writeLock();
                 bstLock.unlock();
 
                 while (true) {
@@ -159,11 +157,11 @@ public class BST {
                             rep.right = cur.right;
                         }
 
-                        cur.unlock();
-                        par.unlock();
+                        cur.writeUnlock();
+                        par.writeUnlock();
                         break;
                     } else {
-                        par.unlock();
+                        par.writeUnlock();
                         par = cur;
 
                         compare = cur.data - data;
@@ -171,8 +169,10 @@ public class BST {
                         else cur = cur.right;
                     }
 
-                    if (cur == null) return false;
-                    else cur.lock();
+                    if (cur == null) {
+                        return false;
+                    }
+                    else cur.writeLock();
                 }
             } else {
                 Node rep = retrieveData(cur);
@@ -183,7 +183,7 @@ public class BST {
                     rep.right = cur.right;
                 }
 
-                cur.unlock();
+                cur.writeUnlock();
                 bstLock.unlock();
             }
 
@@ -197,44 +197,44 @@ public class BST {
 
         if (sub.left != null) {
             cur = sub.left;
-            cur.lock();
+            cur.writeLock();
 
             while (cur.right != null) {
-                if (par != sub) par.unlock();
+                if (par != sub) par.writeUnlock();
                 par = cur;
                 cur = cur.right;
-                cur.lock();
+                cur.writeLock();
             }
 
-            if (cur.left != null) cur.left.lock();
+            if (cur.left != null) cur.left.writeLock();
             if (par == sub) par.left = cur.left;
             else {
                 par.right = cur.left;
-                par.unlock();
+                par.writeUnlock();
             }
-            if (cur.left != null) cur.left.unlock();
+            if (cur.left != null) cur.left.writeUnlock();
 
-            cur.unlock();
+            cur.writeUnlock();
         } else if (sub.right != null) {
             cur = sub.right;
-            cur.lock();
+            cur.writeLock();
 
             while (cur.left != null) {
-                if (par != sub) par.unlock();
+                if (par != sub) par.writeUnlock();
                 par = cur;
                 cur = cur.left;
-                cur.lock();
+                cur.writeLock();
             }
 
-            if (cur.right != null) cur.right.lock();
+            if (cur.right != null) cur.right.writeLock();
             if (par == sub) par.right = cur.right;
             else {
                 par.left = cur.right;
-                par.unlock();
+                par.writeUnlock();
             }
-            if (cur.right != null) cur.right.unlock();
+            if (cur.right != null) cur.right.writeUnlock();
 
-            cur.unlock();
+            cur.writeUnlock();
         } else return null;
         return cur;
     }
@@ -272,7 +272,7 @@ public class BST {
     private class Node {
         private int data;
         private Node left, right;
-        private Lock lock = new ReentrantLock();
+        private ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
 
         public Node(int data, Node l, Node r) {
             left = l;
@@ -288,12 +288,20 @@ public class BST {
             return "" + data;
         }
 
-        public void lock() {
-            lock.lock();
+        public void readLock() {
+            lock.readLock().lock();
         }
 
-        public void unlock() {
-            lock.unlock();
+        public void readUnlock() {
+            lock.readLock().unlock();
+        }
+
+        public void writeLock() {
+            lock.writeLock().lock();
+        }
+
+        public void writeUnlock() {
+            lock.writeLock().unlock();
         }
     }
 }
