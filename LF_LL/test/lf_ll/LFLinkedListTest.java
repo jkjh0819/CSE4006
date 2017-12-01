@@ -16,7 +16,7 @@ import static org.junit.Assert.*;
 //test for proof operation of lock-free linked list
 public class LFLinkedListTest {
 
-    private static final int testSize = 30000;
+    private static final int testSize = 100000;
     private static List<Integer> numbers;
 
     private static LFLinkedList lfll;

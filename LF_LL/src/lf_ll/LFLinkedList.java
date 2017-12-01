@@ -21,11 +21,11 @@ public class LFLinkedList {
     //this function is addition of new node to linked list
     public boolean add(int data) {
         while (true) {
-            //get window(targets of operation)
-            Window window = find(head, data);
+            //get snap(targets of operation)
+            Snap snap = getSnap(head, data);
 
-            //and set window value to logical variable
-            Node pred = window.pred, curr = window.curr;
+            //and set snap value to logical variable
+            Node pred = snap.pred, curr = snap.curr;
 
             //new data is already in linked list, return false
             //do not accept duplicate
@@ -49,11 +49,11 @@ public class LFLinkedList {
     public boolean remove(int data) {
         boolean tryMark;
         while (true) {
-            //get window(targets of operation)
-            Window window = find(head, data);
+            //get snap(targets of operation)
+            Snap snap = getSnap(head, data);
 
-            //and set window value to logical variable
-            Node pred = window.pred, curr = window.curr;
+            //and set snap value to logical variable
+            Node pred = snap.pred, curr = snap.curr;
 
             //if there is no data for remove in linked list, return false
             if (curr.data != data) {
@@ -88,7 +88,7 @@ public class LFLinkedList {
         while(curr.data < data){
             //get next node reference
             curr = curr.next.getReference();
-            //if successor is not in logical deletion, deleteBit is false
+            //if current is not in logical deletion, deleteBit is false and can get next
             //but, is in logical deletion, deleteBit is true
             Node succ = curr.next.get(deleteBit);
         }
@@ -98,7 +98,7 @@ public class LFLinkedList {
     }
 
     //this function is for finding targets of a operation
-    public Window find(Node head, int data) {
+    public Snap getSnap(Node head, int data) {
         Node pred = null, curr = null, succ = null;
 
         //initialize check array
@@ -127,9 +127,9 @@ public class LFLinkedList {
                     curr = succ;
                     succ = curr.next.get(deleteBit);
                 }
-                //find target
+                //getSnap target
                 if (curr.data >= data)
-                    return new Window(pred, curr);
+                    return new Snap(pred, curr);
 
                 //search next
                 pred = curr;

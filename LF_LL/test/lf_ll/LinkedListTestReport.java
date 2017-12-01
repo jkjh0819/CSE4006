@@ -18,7 +18,7 @@ public class LinkedListTestReport {
 
     private int numThreads;
     private int[] searchRatio;
-    private static final int testSize = 50000;
+    private static final int testSize = 100000;
     private static List<Integer> numbers;
 
     private LFLinkedList lfll;
